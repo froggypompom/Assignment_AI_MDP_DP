@@ -27,20 +27,20 @@ class Dynamic_Programming:
         V_s = np.zeros(env.n_states)
     
         # IMPLEMENT YOUR VALUE ITERATION ALGORITHM HERE
-        while(True):
+        while(True): # loop
             delta = 0
-            copyV_s = V_s
-            for index, value in enumerate(copyV_s):
-                action_eval = []
+            copyV_s = V_s # copy the state value table
+            for index, value in enumerate(copyV_s): # iterate over values of the copy
+                action_eval = [] # empty list
                 for action in env.actions:
-                    s_prime, r = env.transition_function(index, action)
-                    action_eval.append(r + gamma * V_s[s_prime])
-                V_s[index] = max(action_eval)
-                delta = max([delta, np.abs(value - V_s[index])])
+                    s_prime, r = env.transition_function(index, action) # calculate new state and reward from transition function
+                    action_eval.append(r + gamma * V_s[s_prime]) #append to list
+                V_s[index] = max(action_eval) # set new state value to maximal value
+                delta = max([delta, np.abs(value - V_s[index])]) # calculate error
             print(delta)
-            if delta < theta:
-                break
-        self.V_s = V_s
+            if delta < theta: # if maximal error in all states is smaller than theta
+                break # break loop
+        self.V_s = V_s # update V_s
         print(V_s)
         return
 
@@ -83,19 +83,19 @@ class Dynamic_Programming:
             # Compute action values
             if table == 'V' and self.V_s is not None:
                 # IMPLEMENT ACTION VALUE ESTIMATION FROM self.V_s HERE !!!
-                action_eval = []
-                for action in available_actions:
-                    s_prime, r = env.transition_function(current_state, action)
-                    action_eval.append([r + self.V_s[s_prime], action])
+                action_eval = [] # empty list
+                for action in available_actions: # loop over possible actions
+                    s_prime, r = env.transition_function(current_state, action) # calculate new state and reward from transition function
+                    action_eval.append([r + self.V_s[s_prime], action]) # append value from state value table and action string
 
-                greedy_action = max(action_eval, key=lambda item: item[0])[1]  # replace this!
+                greedy_action = max(action_eval, key=lambda item: item[0])[1]  # select the action with maximal value
 
             elif table == 'Q' and self.Q_sa is not None:
                 # IMPLEMENT ACTION VALUE ESTIMATION FROM self.Q_sa here !!!
                 action_eval = []
                 for index, action in enumerate(available_actions):
                     action_eval.append([self.Q_sa[current_state, index], action])
-                greedy_action = max(action_eval, key=lambda item: item[0])[1]
+                greedy_action = max(action_eval, key=lambda item: item[0])[1] # select action with maximal value
                 
             else:
                 print("No optimal value table was detected. Only manual execution possible.")
@@ -137,11 +137,11 @@ if __name__ == '__main__':
     DP = Dynamic_Programming()
 
     # Run value iteration
-    # input('Press enter to run value iteration')
-    # optimal_V_s = DP.value_iteration(env)
-    # input('Press enter to start execution of optimal policy according to V')
-    # DP.execute_policy(env, table='V') # execute the optimal policy
-    #
+    input('Press enter to run value iteration')
+    optimal_V_s = DP.value_iteration(env)
+    input('Press enter to start execution of optimal policy according to V')
+    DP.execute_policy(env, table='V') # execute the optimal policy
+
     # Once again with Q-values:
     input('Press enter to run Q-value iteration')
     optimal_Q_sa = DP.Q_value_iteration(env)

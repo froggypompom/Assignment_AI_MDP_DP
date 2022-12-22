@@ -5,6 +5,10 @@ Dynamic Programming
 Practical for course 'Symbolic AI'
 2020, Leiden University, The Netherlands
 By Thomas Moerland
+
+Lisa Schouten s3162915
+Tom van Gelooven s1853686
+22-12-2022
 """
 
 # Tom van Gelooven, Lisa Schouten

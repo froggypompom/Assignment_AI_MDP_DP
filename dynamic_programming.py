@@ -11,9 +11,6 @@ Tom van Gelooven s1853686
 22-12-2022
 """
 
-# Tom van Gelooven, Lisa Schouten
-# s1853686, s3162915
-
 import numpy as np
 from world import World
 

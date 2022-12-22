@@ -7,6 +7,9 @@ Practical for course 'Symbolic AI'
 By Thomas Moerland
 """
 
+# Tom van Gelooven, Lisa Schouten
+# s1853686, s3162915
+
 import numpy as np
 from world import World
 

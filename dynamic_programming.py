@@ -28,7 +28,7 @@ class Dynamic_Programming:
     
         # IMPLEMENT YOUR VALUE ITERATION ALGORITHM HERE
         while(True): # loop
-            delta = 0
+            delta = 0 # error variable
             copyV_s = V_s # copy the state value table
             for index, value in enumerate(copyV_s): # iterate over values of the copy
                 action_eval = [] # empty list
@@ -41,7 +41,7 @@ class Dynamic_Programming:
             if delta < theta: # if maximal error in all states is smaller than theta
                 break # break loop
         self.V_s = V_s # update V_s
-        print(V_s)
+        # print(V_s)
         return
 
     def Q_value_iteration(self,env,gamma = 1.0, theta=0.001):
@@ -56,20 +56,20 @@ class Dynamic_Programming:
         # IMPLEMENT YOUR Q-VALUE ITERATION ALGORITHM HERE
 
         while(True):
-            delta = 0
-            for state in env.states:
-                for action_no in range(env.n_actions):
-                    x = Q_sa[state, action_no]
-                    s_prime, r = env.transition_function(state, env.actions[action_no])
-                    state_eval = []
-                    for action_prime in range(env.n_actions):
-                        state_eval.append(Q_sa[s_prime, action_prime])
-                    Q_sa[state, action_no] = r + gamma*max(state_eval)
-                    delta = max(delta, np.abs(x - Q_sa[state, action_no]))
-            if delta < theta:
+            delta = 0 # error variable
+            for state in env.states: # loop over possible states
+                for action_no in range(env.n_actions): # loop over possible actions
+                    x = Q_sa[state, action_no] # copy old Q-value
+                    s_prime, r = env.transition_function(state, env.actions[action_no]) # caculate s' and r from T(s,a)
+                    state_eval = [] # empty list
+                    for action_prime in range(env.n_actions): # loop over actions
+                        state_eval.append(Q_sa[s_prime, action_prime]) #append Q(s', a')
+                    Q_sa[state, action_no] = r + gamma*max(state_eval) # set Q(s,a) to the one with maximum Q-value from action list
+                    delta = max(delta, np.abs(x - Q_sa[state, action_no])) # calculate error
+            if delta < theta: #if error is small enough
                 break
-        self.Q_sa = Q_sa
-        print(Q_sa)
+        self.Q_sa = Q_sa # update Q-value table
+        # print(Q_sa)
         return
                 
     def execute_policy(self, env, table='V'):
@@ -92,10 +92,10 @@ class Dynamic_Programming:
 
             elif table == 'Q' and self.Q_sa is not None:
                 # IMPLEMENT ACTION VALUE ESTIMATION FROM self.Q_sa here !!!
-                action_eval = []
-                for index, action in enumerate(available_actions):
-                    action_eval.append([self.Q_sa[current_state, index], action])
-                greedy_action = max(action_eval, key=lambda item: item[0])[1] # select action with maximal value
+                action_eval = [] # empty list
+                for index, action in enumerate(available_actions): # loop over possible actions
+                    action_eval.append([self.Q_sa[current_state, index], action]) # append Q-value for action
+                greedy_action = max(action_eval, key=lambda item: item[0])[1] # select action with maximal Q-value
                 
             else:
                 print("No optimal value table was detected. Only manual execution possible.")
